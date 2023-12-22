@@ -1,0 +1,38 @@
+version: '3'
+services:
+  serviceregistry:
+    image: 'eljoamy/serviceregistry:0.0.1'
+    container_name: serviceregistry
+    ports:
+      - '8761:8761'
+  
+  cloudgateway:
+    image: 'eljoamy/cloudgateway:0.0.1'
+    container_name: cloudgateway
+    ports:
+      - '9090:9090'
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://serviceregistry:8761/eureka
+    depends_on:
+      - serviceregistry
+  
+  adminservice:
+    image: 'eljoamy/adminservice:0.0.1'
+    container_name: adminservice
+    ports:
+      - '8586:8586'
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://serviceregistry:8761/eureka
+    depends_on:
+      - serviceregistry
+
+  authservice:
+    image: 'eljoamy/authservice:0.0.1'
+    container_name: authservice
+    ports:
+      - '8585:8585'
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://serviceregistry:8761/eureka
+    depends_on:
+      - serviceregistry
+      - adminservice
