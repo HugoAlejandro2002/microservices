@@ -11,25 +11,22 @@ if [ ! -f "app.py" ]; then
     echo "Creando app.py..."
     cat > app.py <<EOL
 import mysql.connector
+import json
 import os
 
 def run_sql_script(file_path, connection):
     try:
-        # Crear un cursor para ejecutar comandos SQL
         cursor = connection.cursor()
 
-        # Leer el script SQL desde el archivo
         with open(file_path, 'r') as file:
             sql_script = file.read()
 
-        # Ejecutar el script SQL
         for result in cursor.execute(sql_script, multi=True):
             if result.with_rows:
                 print("Rows:", result.fetchall())
             else:
                 print("Rows affected:", result.rowcount)
 
-        # Confirmar los cambios
         connection.commit()
 
         print("Script SQL ejecutado con éxito.")
@@ -41,27 +38,33 @@ def run_sql_script(file_path, connection):
             connection.close()
             print("Conexión a la base de datos cerrada.")
 
-def handler_lambda(event, context):
-    # Establecer conexión con la base de datos usando variables de entorno
-    connection = mysql.connector.connect(
-        host=os.getenv("DB_HOST"),
-        port=os.getenv("DB_PORT"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASS"),
-        database=os.getenv("DB_NAME")
-    )
+def lambda_handler(event, context):
+    try:
+        connection = mysql.connector.connect(
+            host=os.environ.get('DB_HOST'),
+            port=os.environ.get('DB_PORT'),
+            user=os.environ.get('DB_USER'),
+            password=os.environ.get('DB_PASS'),
+            database=os.environ.get('DB_NAME')
+        )
+        sql_file_path = 'init.sql'
+        run_sql_script(sql_file_path, connection)
 
-    # Ruta al archivo SQL
-    sql_file_path = 'lambda/init.sql'
-
-    # Ejecutar el script
-    run_sql_script(sql_file_path, connection)
-
-    # Retornar información al finalizar
-    return {
-        'statusCode': 200,
-        'body': 'Script SQL ejecutado con éxito'
-    }
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json",
+            },
+            "body": json.dumps({"message": "Script SQL ejecutado con éxito"})
+        }
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "headers": {
+                "Content-Type": "application/json",
+            },
+            "body": json.dumps({"error": str(e)})
+        }
 EOL
 fi
 
@@ -121,3 +124,9 @@ echo "URL del recurso: http://localhost:4566/restapis/$API_ID/test/_user_request
 
 # Mensaje final
 echo "Despliegue completo."
+
+# Agregar un cron job para invocar la función Lambda a las 11:59 PM hora local
+echo "Agregando cron job para invocar la función Lambda diariamente a las 11:59 PM hora local..."
+CRON_JOB="59 23 * * * invoke_lambda.sh"
+(crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+echo "Cron job agregado para invocar la función Lambda diariamente a las 11:59 PM hora local"
