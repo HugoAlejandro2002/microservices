@@ -84,14 +84,16 @@ fi
 
 # Crear un nuevo archivo ZIP con la función Lambda y sus dependencias
 echo "Creando nuevo paquete de función Lambda..."
-zip -r function.zip lambda/
+cd lambda
+zip -r ../function.zip *
+cd ..
 
 # Desplegar la función Lambda usando LocalStack
 echo "Desplegando en LocalStack..."
 LAMBDA_ARN=$(aws --endpoint-url=http://localhost:4566 lambda create-function \
     --function-name miFuncionLambda \
     --zip-file fileb://function.zip \
-    --handler lambda/app.lambda_handler \
+    --handler app.lambda_handler \
     --runtime python3.9 \
     --role arn:aws:iam::123456789012:role/irrelevante \
     --environment "Variables={DB_HOST=backend-db.clk840mg4qol.us-east-2.rds.amazonaws.com,DB_PORT=3306,DB_USER=admin,DB_PASS=admin123,DB_NAME=reservations_db}" | jq -r '.FunctionArn')
