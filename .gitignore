@@ -1,0 +1,23 @@
+# variables de entorno
+.env
+
+# Ignorar contenido de IDEs
+.idea/
+.vscode/
+
+# Ignorar contenido en la carpeta lamda
+lambda/bin/
+lambda/dotenv/
+lambda/google/
+lambda/mysql/
+lambda/mysqlx/
+lambda/mysql_connector_python-*.dist-info/
+lambda/protobuf-*.dist-info/
+lambda/python_dotenv-*.dist-info/
+lambda/*.so
+lambda/__pycache__/
+
+# Ignorar contenido .zip
+.zip
+
+tree.txt
