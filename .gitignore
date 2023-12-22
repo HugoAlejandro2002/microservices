@@ -6,14 +6,18 @@
 .vscode/
 
 # Ignorar contenido en la carpeta lamda
-lamda/bin/
-lamda/dotenv/
-lamda/google/
-lamda/mysql/
-lamda/mysqlx/
-lamda/mysql_connector_python-*.dist-info/
-lamda/protobuf-*.dist-info/
-lamda/python_dotenv-*.dist-info/
-lamda/*.so
-lamda/__pycache__/
+lambda/bin/
+lambda/dotenv/
+lambda/google/
+lambda/mysql/
+lambda/mysqlx/
+lambda/mysql_connector_python-*.dist-info/
+lambda/protobuf-*.dist-info/
+lambda/python_dotenv-*.dist-info/
+lambda/*.so
+lambda/__pycache__/
 
+# Ignorar contenido .zip
+.zip
+
+tree.txt
