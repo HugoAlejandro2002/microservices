@@ -36,3 +36,27 @@ services:
     depends_on:
       - serviceregistry
       - adminservice
+  
+  reservationservice:
+    image: 'eljoamy/reservationservice:0.0.1'
+    container_name: reservationservice
+    ports:
+      - '8588:8588'
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://serviceregistry:8761/eureka
+    depends_on:
+      - serviceregistry
+      - adminservice
+      - authservice
+
+  notificationservice:
+    image: 'eljoamy/notificationservice:0.0.1'
+    container_name: notificationservice
+    ports:
+      - '8587:8587'
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://serviceregistry:8761/eureka
+    depends_on:
+      - serviceregistry
+      - adminservice
+      - authservice
