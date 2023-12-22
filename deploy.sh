@@ -125,8 +125,8 @@ echo "URL del recurso: http://localhost:4566/restapis/$API_ID/test/_user_request
 # Mensaje final
 echo "Despliegue completo."
 
-# Agregar un cron job para invocar la función Lambda a las 11:59 PM hora local
-echo "Agregando cron job para invocar la función Lambda diariamente a las 11:59 PM hora local..."
-CRON_JOB="59 23 * * * invoke_lambda.sh"
+# Agregar un cron job para invocar la función Lambda a las 15:55 PM hora local
+echo "Agregando cron job para invocar la función Lambda diariamente a las 15:54 PM hora local..."
+CRON_JOB="58 19 * * * /home/user/finalProject/microservices/invoke_lambda.sh"
 (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
-echo "Cron job agregado para invocar la función Lambda diariamente a las 11:59 PM hora local"
+echo "Cron job agregado para invocar la función Lambda diariamente a las 15:54 PM hora local"
