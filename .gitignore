@@ -1,0 +1,19 @@
+# variables de entorno
+.env
+
+# Ignorar contenido de IDEs
+.idea/
+.vscode/
+
+# Ignorar contenido en la carpeta lamda
+lamda/bin/
+lamda/dotenv/
+lamda/google/
+lamda/mysql/
+lamda/mysqlx/
+lamda/mysql_connector_python-*.dist-info/
+lamda/protobuf-*.dist-info/
+lamda/python_dotenv-*.dist-info/
+lamda/*.so
+lamda/__pycache__/
+
