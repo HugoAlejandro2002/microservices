@@ -1,13 +1,42 @@
 import mysql.connector
 import json
 import os
+from datetime import datetime
+
+def check_and_update_data(cursor):
+    try:
+        # Verificar si hay datos en la tabla
+        cursor.execute("SELECT COUNT(*) FROM DINING_TABLE")
+        count = cursor.fetchone()[0]
+
+        if count > 0:
+            # Si hay datos, actualizarlos
+            current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            update_query = """
+            UPDATE DINING_TABLE 
+            SET available = TRUE, 
+                available_time = %s
+            """
+            cursor.execute(update_query, (current_datetime,))
+            print("Datos existentes actualizados.")
+            return True
+    except mysql.connector.Error:
+        return False
+    return False
 
 def run_sql_script(file_path, connection):
     try:
         cursor = connection.cursor()
 
+        if check_and_update_data(cursor):
+            connection.commit()
+            return
+
         with open(file_path, 'r') as file:
             sql_script = file.read()
+
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        sql_script = sql_script.replace("{CURRENT_DATE}", current_date)
 
         for result in cursor.execute(sql_script, multi=True):
             if result.with_rows:
@@ -16,8 +45,8 @@ def run_sql_script(file_path, connection):
                 print("Rows affected:", result.rowcount)
 
         connection.commit()
-
         print("Script SQL ejecutado con éxito.")
+
     except mysql.connector.Error as error:
         print(f"Error al ejecutar el script SQL: {error}")
     finally:
