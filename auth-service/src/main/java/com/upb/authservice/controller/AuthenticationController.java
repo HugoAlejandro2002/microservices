@@ -1,17 +1,16 @@
 package com.upb.authservice.controller;
 
-import com.upb.authservice.model.JwtAuthenticationResponse;
+import com.upb.authservice.entity.ERole;
 import com.upb.authservice.model.LoginRequest;
 import com.upb.authservice.model.SignUpRequest;
+import com.upb.authservice.model.UserResponse;
 import com.upb.authservice.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 @RequiredArgsConstructor
 @RestController
 @Log4j2
@@ -35,6 +34,33 @@ public class AuthenticationController {
         } catch (Exception e) {
             log.error("Login failed for user: {}", loginRequest.getUsername(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed");
+        }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestParam("token") String token) {
+        try {
+            UserResponse userData = authenticationService.validateToken(token);
+            return ResponseEntity.ok(userData);
+        } catch (Exception e) {
+            log.error("Token validation failed", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Token validation failed");
+        }
+    }
+
+    @GetMapping("/validateAdmin")
+    public ResponseEntity<?> validateAdminToken(@RequestParam("token") String token) {
+        try {
+            UserResponse userData = authenticationService.validateToken(token);
+            boolean isAdmin = userData.getRole().equals(ERole.ROLE_ADMIN); // Asumiendo que los roles están dentro de UserResponse
+            if (isAdmin) {
+                return ResponseEntity.ok(userData);
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+            }
+        } catch (Exception e) {
+            log.error("Admin token validation failed", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Token validation failed");
         }
     }
 }

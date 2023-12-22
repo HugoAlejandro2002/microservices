@@ -5,10 +5,13 @@ import com.upb.authservice.entity.User;
 import com.upb.authservice.model.JwtAuthenticationResponse;
 import com.upb.authservice.model.LoginRequest;
 import com.upb.authservice.model.SignUpRequest;
+import com.upb.authservice.model.UserResponse;
 import com.upb.authservice.repository.UserRepository;
 import com.upb.authservice.service.AuthenticationService;
 import com.upb.authservice.service.JWTService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +22,7 @@ import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
 
@@ -56,6 +60,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return jwtAuthenticationResponse;
 
+    }
+
+    public UserResponse validateToken(String token){
+        Claims userData = jwtService.extractAllClaims(token);
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUsername(userData.getSubject());
+        User user = userRepository.findByUsername(userData.getSubject()).orElseThrow(() -> new IllegalArgumentException("Invalid username"));
+        userResponse.setEmail(user.getEmail());
+        userResponse.setRole(user.getRole());
+        userResponse.setId(user.getId());
+        return userResponse;
     }
 
 }
