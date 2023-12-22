@@ -18,6 +18,8 @@ import java.util.function.Function;
 @Service
 public class JWTServiceImpl implements JWTService {
 
+    public static final String SECRET = "klajflkdsjfkejlkjojroi093u9432909i09qo3jlkjoiu9u32orjelkjroi3uroifejoi3uroejroi3ukiu3roioiur32irlkjori3oireoio";
+
     @Override
     public String generateToken(UserDetails userDetails){
         return Jwts.builder().setSubject(userDetails.getUsername())
@@ -42,11 +44,11 @@ public class JWTServiceImpl implements JWTService {
         return claimsResolvers.apply(claims);
     }
     private Key getSigninKey(){
-        byte[] key = Decoders.BASE64.decode("klajflkdsjfkejlkjojroi093u9432909i09qo3jlkjoiu9u32orjelkjroi3uroifejoi3uroejroi3ukiu3roioiur32irlkjori3oireoio");
+        byte[] key = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(key);
     }
 
-    private  Claims extractAllClaims(String token){
+    public Claims extractAllClaims(String token){
         return  Jwts.parserBuilder().setSigningKey(getSigninKey()).build().parseClaimsJws(token).getBody();
     }
 
@@ -57,10 +59,11 @@ public class JWTServiceImpl implements JWTService {
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token){
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
+
 }
