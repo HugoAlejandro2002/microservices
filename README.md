@@ -196,6 +196,7 @@ Elige una opción (1-4):
         </a>
     </td></tr>
 </table>
+
 ## Licencia
 
 Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
