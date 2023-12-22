@@ -9,7 +9,8 @@ Una breve descripción de lo que hace tu proyecto de microservicios.
 4. [Docker Compose](#docker-compose)
 5. [Scripts de Despliegue](#scripts-de-despliegue)
 6. [Contribuciones](#contribuciones)
-7. [Licencia](#licencia)
+7. [Autores](#autores)
+8. [Licencia](#licencia)
 
 ## Instalación
 
