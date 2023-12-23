@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.net.URI;
 import java.util.logging.Logger;
@@ -28,6 +30,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
     @Autowired
     private RestTemplate template;
+
+    @Value("${auth.service.url}")
+    private String authServiceUrl;
 
     public AuthenticationFilter() {
         super(Config.class);
@@ -46,8 +51,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     authHeader = authHeader.substring(7);
                 }
                 try {
-                    String response = template.getForObject("http://localhost:8585/api/auth/validate?token=" + authHeader, String.class);
-                    System.out.println(response);
+                    String response = template.getForObject(authServiceUrl + "/validate?token=" + authHeader, String.class);                    System.out.println(response);
                     JSONObject obj = new JSONObject(response);
                     String userId = obj.getString("id");
                     String url = exchange.transformUrl(exchange.getRequest().getURI() + "?userId=" + userId);

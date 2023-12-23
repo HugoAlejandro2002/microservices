@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import java.net.URI;
 
@@ -25,6 +27,9 @@ public class AdminAuthenticationFilter extends AbstractGatewayFilterFactory<Admi
 
     @Autowired
     private RestTemplate template;
+    
+    @Value("${auth.service.url}")
+    private String authServiceUrl;
 
     public AdminAuthenticationFilter() {
         super(Config.class);
@@ -43,8 +48,7 @@ public class AdminAuthenticationFilter extends AbstractGatewayFilterFactory<Admi
                     authHeader = authHeader.substring(7);
                 }
                 try {
-                    String response = template.getForObject("http://localhost:8585/api/auth/validate?token=" + authHeader, String.class);
-                    log.info("Response from auth service: " + response);
+                    String response = template.getForObject(authServiceUrl + "/validate?token=" + authHeader, String.class);                    log.info("Response from auth service: " + response);
                     JSONObject obj = new JSONObject(response);
                     String role = obj.getString("role");
                     if (!"ROLE_ADMIN".equals(role)) {
