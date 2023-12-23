@@ -180,23 +180,33 @@ Elige una opción (1-4):
 - Actualiza la documentación si introduces cambios en la API o en características importantes.
 
 ## Autores
+
 <table>
-<tr>
+  <tr>
     <td align="center">
-        <a href="https://github.com/ElJoamy">
-            <img src="https://avatars.githubusercontent.com/u/68487005?v=4" width="50;" alt="ElJoamy"/>
-            <br />
-            <sub><b>Joseph Anthony Meneses Salguero</b></sub>
-        </a>
+      <a href="https://github.com/ElJoamy">
+        <img src="https://avatars.githubusercontent.com/u/68487005?v=4" width="50" alt="ElJoamy"/>
+        <br />
+        <sub><b>Joseph Anthony Meneses Salguero</b></sub>
+      </a>
     </td>
     <td align="center">
-        <a href="https://github.com/HugoAlejandro2002">
-            <img src="https://avatars.githubusercontent.com/u/97768733?v=4" width="50;" alt="HugoAlejandro2002"/>
-            <br />
-            <sub><b>Hugo Alejandro Apaza Huaycho</b></sub>
-        </a>
-    </td></tr>
+      <a href="https://github.com/HugoAlejandro2002">
+        <img src="https://avatars.githubusercontent.com/u/97768733?v=4" width="50" alt="HugoAlejandro2002"/>
+        <br />
+        <sub><b>Hugo Alejandro Apaza Huaycho</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/iandeimpaler">
+        <img src="https://avatars.githubusercontent.com/u/11223344?v=4" width="50" alt="iandeimpaler"/>
+        <br />
+        <sub><b>Ian Marcus Terceros Villegas</b></sub>
+      </a>
+    </td>
+  </tr>
 </table>
+
 
 ## Licencia
 
